@@ -1,0 +1,10 @@
+# requirements.txt
+python==3.11
+torch  # Add version if known (e.g., torch==2.x.x+cu11x)
+transformers
+datasets
+tqdm
+numpy
+pandas
+scipy
+pyyaml
