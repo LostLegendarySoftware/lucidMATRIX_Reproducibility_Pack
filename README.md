@@ -1,167 +1,113 @@
-# Lucid Matrix Reproducibility Pack
+lucidMATRIX Reproducibility Pack
 
-This repository contains the artifacts necessary to reproduce the benchmark results for the Lucid Matrix system.
+by Lost Legendary Labs — Jason “Mesiah Bishop” Langhorne
 
-## Overview
+Overview
 
-The Lucid Matrix system is a beam-simulated reasoning system with proof-carrying actions, designed to provide accurate, safe, and transparent AI capabilities. This reproducibility pack contains all the necessary code, data, and documentation to verify the system's performance claims.
+The lucidMATRIX Reproducibility Pack provides all artifacts, scripts, and documentation required to independently verify the experimental results reported by Lost Legendary Labs, an independent research group focused on reasoning safety, alignment, and high-performance multimodal inference.
 
-## Repository Structure
+This package enables replication of three core evaluations:
 
-```
-artifacts/
-├── docker/                  # Docker configuration for reproducible environment
-│   ├── Dockerfile           # Container definition
-│   ├── docker-compose.yml   # Compose configuration
-│   ├── requirements.txt     # Python dependencies
-│   └── env.lock             # Locked environment specification
-├── weights/                 # Model weights information and download scripts
-│   ├── download_weights.sh  # Script to download model weights
-│   └── README.md            # Information about model weights
-├── data/                    # Benchmark datasets information and download scripts
-│   ├── download_datasets.sh # Script to download datasets
-│   └── README.md            # Information about datasets
-├── runs/                    # Benchmark results and evaluation scripts
-│   ├── truthfulqa/          # TruthfulQA benchmark results
-│   ├── emobench/            # EmoBench benchmark results
-│   ├── latency/             # Latency benchmark results
-│   └── ablation/            # Ablation studies
-├── scripts/                 # Evaluation and utility scripts
-│   ├── run_all.sh           # Main script to run all benchmarks
-│   ├── ablate_beam.sh       # Script for beam width ablation study
-│   ├── ablate_pca.sh        # Script for PCA ablation study
-│   ├── ablate_sims.sh       # Script for simulations ablation study
-│   └── ablate_cache.sh      # Script for cache ablation study
-├── signing/                 # Cryptographic verification materials
-│   ├── manifest.sig         # Signature for the artifact manifest
-│   ├── pubkey.pem           # Public key for verification
-│   ├── sha256sum.txt        # SHA-256 checksums for artifacts
-│   └── verify_signatures.sh # Script to verify signatures
-├── hardware.md              # Hardware specifications for benchmarks
-└── README.md                # This file
-```
+TruthfulQA — factual accuracy and epistemic calibration
 
-## Getting Started
+EmoBench — emotional intelligence and safety alignment
 
-### Prerequisites
+Latency — interactive response-time performance on mid-range GPUs
 
-- Docker and Docker Compose
-- NVIDIA GPU with CUDA support (recommended)
-- 16GB+ RAM
-- 20GB+ free disk space
+All runs are deterministic with seed = 42, and cryptographic signatures are included for audit-level reproducibility.
 
-### Quick Start
+Repository Structure
+lucidmatrix_reproducibility/
+│
+├── artifacts/
+│   ├── runs/
+│   │   ├── truthfulqa/    → factual-accuracy benchmark
+│   │   ├── emobench/      → emotional-safety benchmark
+│   │   └── latency/       → real-time-performance benchmark
+│   ├── scripts/           → setup, ablation, and verification utilities
+│   ├── signing/           → signature & checksum verification
+│   ├── docs/              → methodology, results & safety summaries
+│   ├── benchmarks.md      → benchmark definitions
+│   ├── runtime.md         → environment and dependency info
+│   ├── safety.md          → alignment and safety evaluation notes
+│   ├── hardware.md        → hardware/environment specifications
+│   ├── LICENSE            → Apache 2.0 license text
+│   └── README.md          → this execution and verification guide
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/lucidmatrix/reproducibility-pack.git
-   cd reproducibility-pack
-   ```
+Benchmark Instructions
+TruthfulQA (Truthfulness Benchmark)
 
-2. Build and start the Docker container:
-   ```bash
-   cd docker
-   docker-compose up -d
-   ```
+Measures factual accuracy and epistemic grounding.
+Dataset: 817 questions / 38 categories.
 
-3. Run all benchmarks:
-   ```bash
-   docker exec -it lucid-matrix bash
-   cd /home/lucidmatrix/artifacts
-   ./scripts/run_all.sh
-   ```
-
-4. View results:
-   ```bash
-   # Results will be available in the runs/ directory
-   ls -la runs/*/
-   ```
-
-## Benchmark Details
-
-### TruthfulQA
-
-The TruthfulQA benchmark evaluates the model's ability to provide truthful answers to questions. The benchmark consists of 817 questions across 38 categories.
-
-To run the TruthfulQA evaluation:
-```bash
-cd runs/truthfulqa
+cd artifacts/runs/truthfulqa
 python score.py --predictions predictions.jsonl --output-dir ./
-```
 
-### EmoBench
 
-The EmoBench benchmark evaluates the model's emotional intelligence and safety. The benchmark consists of 250 prompts across 7 emotion categories.
+Result: 97.2 % accuracy
+Metric Details: factual precision, misconception avoidance, epistemic humility.
 
-To run the EmoBench evaluation:
-```bash
-cd runs/emobench
+EmoBench (Emotional Safety Benchmark)
+
+Evaluates emotion recognition, empathy, and harm avoidance across 7 categories.
+
+cd artifacts/runs/emobench
 python confusion_matrix.py --predictions predictions.jsonl --output-dir ./
-```
 
-### Latency
 
-The latency benchmark measures the model's response time under various conditions.
+Result: 98.3 % macro-F1 (average safety = 98.3 %)
+Metrics: safety score, empathy score, per-emotion confusion matrix.
 
-To run the latency evaluation:
-```bash
-cd runs/latency
+Latency (Interactive Performance Benchmark)
+
+Assesses response-time efficiency on mid-range hardware (RTX 2060 6 GB VRAM).
+
+cd artifacts/runs/latency
 python analyze_latency.py --timings timings.csv --output-dir ./
-```
 
-### Ablation Studies
 
-Ablation studies evaluate the impact of different components and configurations on the model's performance.
+Result: P50 = 100.2 ms | P95 = 125.7 ms
+Breakdown: reasoning 44 %, generation 48 %, parsing 3 %, post-proc 5 %.
 
-To run the beam width ablation study:
-```bash
-./scripts/ablate_beam.sh
-```
+Verification & Integrity
+Cryptographic Verification
 
-## Verification
+All artifacts are SHA-256 signed.
 
-### Cryptographic Verification
-
-To verify the integrity of the artifacts:
-```bash
-cd signing
+cd artifacts/signing
 ./verify_signatures.sh
-```
 
-### Reproducibility
+Reproducibility Settings
 
-All benchmarks use a fixed seed (42) for reproducibility. The hardware specifications used for the benchmarks are documented in `hardware.md`.
+Random seed: 42
 
-## Results Summary
+Hardware: see hardware.md
 
-| Benchmark | Metric | Value |
-|-----------|--------|-------|
-| TruthfulQA | Accuracy | 97.2% |
-| EmoBench | Macro F1 | 98.3% |
-| Latency | P50 | 100.2ms |
-| Latency | P95 | 125.7ms |
+Environment: Python 3.11 + CUDA 11.8 | environment.lock ensures dependency parity.
 
-## Citation
+Results Summary
+Benchmark	Metric	Value
+TruthfulQA	Accuracy	97.2 %
+EmoBench	Macro F1 (Safety)	98.3 %
+Latency	P50 (ms)	100.2
+Latency	P95 (ms)	125.7
+Citation
 
-If you use this reproducibility pack in your research, please cite:
+If you reference this pack, please cite:
 
-```
-@misc{lucidmatrix2025,
-  author = {Lucid Matrix Team},
-  title = {Lucid Matrix: A Beam-Simulated Reasoning System with Proof-Carrying Actions},
-  year = {2025},
+@misc{lostlegendary2025lucidmatrix,
+  author = {Langhorne, Jason "Mesiah Bishop" and Lost Legendary Labs},
+  title  = {lucidMATRIX Reproducibility Pack: Independent Verification of Truthfulness, Emotional Safety, and Latency Performance},
+  year   = {2025},
   publisher = {GitHub},
-  journal = {GitHub repository},
-  howpublished = {\url{https://github.com/lucidmatrix/reproducibility-pack}}
+  howpublished = {\url{https://github.com/LostLegendarySoftware/lucidMATRIX_Reproducibility_Pack}}
 }
-```
 
-## License
+License
 
-This reproducibility pack is released under the Apache 2.0 license. See the LICENSE file for details.
+Released under the Apache 2.0 License.
+See LICENSE for details.
 
-## Contact
+Contact
 
-For questions or issues regarding this reproducibility pack, please contact:
-- Email: research@lucidmatrix.org
-- GitHub Issues: https://github.com/lucidmatrix/reproducibility-pack/issues
+Lost Legendary Labs
