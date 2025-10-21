@@ -1,121 +1,149 @@
-lucidMATRIX Reproducibility Pack
+🧬 lucidMATRIX Reproducibility Pack
 
-by Lost Legendary Labs — Jason “Mesiah Bishop” Langhorne
+Lost Legendary Labs — Jason “Mesiah Bishop” Langhorne
+
+
+
 
 Overview
 
-The lucidMATRIX Reproducibility Pack provides all artifacts, scripts, and documentation required to independently verify the experimental results reported by Lost Legendary Labs, an independent research group focused on reasoning safety, alignment, and high-performance multimodal inference.
+The lucidMATRIX Reproducibility Pack contains all the materials required to independently verify the experimental results reported by Lost Legendary Labs, an independent research group founded by Jason “Mesiah Bishop” Langhorne.
 
-This package enables replication of three core evaluations:
+lucidMATRIX is a modular reasoning runtime that combines beam-simulated inference (width = 11), proof-carrying actions, and a content-addressed provenance layer for transparent, verifiable computation.
 
-TruthfulQA — factual accuracy and epistemic calibration
+This repository enables full replication of three core benchmarks:
 
-EmoBench — emotional intelligence and safety alignment
+Benchmark	Focus	Metric
+TruthfulQA	Cognitive integrity	Accuracy 97.2 %
+EmoBench v2.0	Emotional safety & empathy	Macro-F1 98.3 %
+Latency Eval	Real-time inference	P50 = 100.2 ms
 
-Latency — interactive response-time performance on mid-range GPUs
-
-All runs are deterministic with seed = 42, and cryptographic signatures are included for audit-level reproducibility.
+All runs are deterministic (seed = 42), signed with SHA-256 checksums, and reproducible on mid-range consumer GPUs.
 
 Repository Structure
-lucidmatrix_reproducibility/
+lucidMATRIX_Reproducibility_Pack/
 │
-├── artifacts/
-│   ├── runs/
-│   │   ├── truthfulqa/    → factual-accuracy benchmark
-│   │   ├── emobench/      → emotional-safety benchmark
-│   │   └── latency/       → real-time-performance benchmark
-│   ├── scripts/           → setup, ablation, and verification utilities
-│   ├── signing/           → signature & checksum verification
-│   ├── docs/              → methodology, results & safety summaries
-│   ├── benchmarks.md      → benchmark definitions
-│   ├── runtime.md         → environment and dependency info
-│   ├── safety.md          → alignment and safety evaluation notes
-│   ├── hardware.md        → hardware/environment specifications
-│   ├── LICENSE            → Apache 2.0 license text
-│   └── README.md          → this execution and verification guide
+├── docker/            # Dockerfile, docker-compose.yml, env.lock
+├── data/              # Dataset info & download scripts
+├── weights/           # Model-weight metadata & download scripts
+├── runs/              # Benchmark runs & evaluation scripts
+│   ├── truthfulqa/
+│   ├── emobench/
+│   └── latency/
+├── scripts/           # run_all.sh, ablation & utility scripts
+├── signing/           # sha256sum.txt, pubkey.pem, verify_signatures.sh
+├── hardware.md        # Hardware & environment specifications
+├── LICENSE            # Apache 2.0 license text
+└── README.md          # This file
 
-Benchmark Instructions
-TruthfulQA (Truthfulness Benchmark)
+Quick Start
+1️⃣ Clone the repository
+git clone https://github.com/LostLegendarySoftware/lucidMATRIX_Reproducibility_Pack.git
+cd lucidMATRIX_Reproducibility_Pack
 
-Measures factual accuracy and epistemic grounding.
-Dataset: 817 questions / 38 categories.
+2️⃣ Build and start Docker
+cd docker
+docker-compose up -d
 
-cd artifacts/runs/truthfulqa
+3️⃣ Run all benchmarks
+docker exec -it lucid-matrix bash
+cd /home/lucidmatrix    # container workdir points to repo root
+./scripts/run_all.sh
+
+4️⃣ Inspect results
+ls -la runs/*/
+
+Benchmark Details
+🧠 TruthfulQA — Cognitive Integrity
+
+Purpose: evaluate factual accuracy and epistemic calibration.
+Dataset: 817 questions across 38 categories.
+
+cd runs/truthfulqa
 python score.py --predictions predictions.jsonl --output-dir ./
 
 
-Result: 97.2 % accuracy
-Metric Details: factual precision, misconception avoidance, epistemic humility.
+Expected result: 97.2 % accuracy
 
-EmoBench (Emotional Safety Benchmark)
+💬 EmoBench v2.0 — Emotional Safety
 
-Evaluates emotion recognition, empathy, and harm avoidance across 7 categories.
+Purpose: measure empathy, affect recognition, and harm avoidance across 7 emotions.
 
-cd artifacts/runs/emobench
+cd runs/emobench
 python confusion_matrix.py --predictions predictions.jsonl --output-dir ./
 
 
-Result: 98.3 % macro-F1 (average safety = 98.3 %)
-Metrics: safety score, empathy score, per-emotion confusion matrix.
+Expected result: 98.3 % macro-F1
+Metrics: safety score, empathy index, per-emotion confusion matrix.
 
-Latency (Interactive Performance Benchmark)
+⚡ Latency Eval — Interactive Performance
 
-Assesses response-time efficiency on mid-range hardware (RTX 2060 6 GB VRAM).
+Purpose: test inference speed on mid-range GPUs (RTX 2060 6 GB).
 
-cd artifacts/runs/latency
+cd runs/latency
 python analyze_latency.py --timings timings.csv --output-dir ./
 
 
-Result: P50 = 100.2 ms | P95 = 125.7 ms
-Breakdown: reasoning 44 %, generation 48 %, parsing 3 %, post-proc 5 %.
+Expected result: P50 = 100.2 ms | P95 = 125.7 ms
 
 Verification & Integrity
 Cryptographic Verification
 
-All artifacts are SHA-256 signed.
+All artifacts are signed and hashed:
 
-cd artifacts/signing
+cd signing
 ./verify_signatures.sh
 
-Reproducibility Settings
+Environment Reproducibility
 
-Random seed: 42
+Seed: 42
 
-Hardware: see hardware.md
+GPU: RTX 2060 (6 GB VRAM)
 
-Environment: Python 3.11 + CUDA 11.8 | environment.lock ensures dependency parity.
+CUDA: 11.8
+
+Python: 3.11
+
+Environment lock: docker/env.lock ensures dependency parity
 
 Results Summary
 Benchmark	Metric	Value
 TruthfulQA	Accuracy	97.2 %
-EmoBench	Macro F1 (Safety)	98.3 %
+EmoBench v2	Macro F1 (Safety)	98.3 %
 Latency	P50 (ms)	100.2
 Latency	P95 (ms)	125.7
 Citation
 
-If you reference this pack, please cite:
+If you use this reproducibility pack, please cite:
 
-@misc{lostlegendary2025lucidmatrix,
-  author = {Langhorne, Jason "Mesiah Bishop" and Lost Legendary Labs},
-  title  = {lucidMATRIX Reproducibility Pack: Independent Verification of Truthfulness, Emotional Safety, and Latency Performance},
-  year   = {2025},
-  publisher = {GitHub},
-  howpublished = {\url{https://github.com/LostLegendarySoftware/lucidMATRIX_Reproducibility_Pack}}
+@misc{lucidmatrix2025,
+  author       = {Langhorne, Jason "Mesiah Bishop" and Lost Legendary Labs},
+  title        = {lucidMATRIX Reproducibility Pack: Independent Verification of Truthfulness, Emotional Safety, and Latency Performance},
+  year         = {2025},
+  howpublished = {\url{https://github.com/LostLegendarySoftware/lucidMATRIX_Reproducibility_Pack}},
+  note         = {Reproducibility Pack v1.0}
 }
 
 License
 
 Released under the Apache 2.0 License.
-See LICENSE for details.
+See LICENSE
+ for details.
 
 Contact
 
-Lost Legendary Labs:
+Lost Legendary Labs
+📧 support@darkmagi.io
 
-For benchmark help:
 
-Support@DarkMagi.io
+🌐 https://github.com/LostLegendarySoftware
 
-For business inquiries:
+Notes for Verification Teams
 
-Mesiah@DarkMagi.io
+Each runs/ subfolder includes predictions, metrics, and logs.
+
+Use the provided Docker image for identical dependency resolution.
+
+Verify artifact integrity via the signatures before running.
+
+Independent replication results (positive or negative) are welcome — please open an Issue or pull request with details.
