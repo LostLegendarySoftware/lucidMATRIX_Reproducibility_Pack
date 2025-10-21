@@ -110,4 +110,12 @@ See LICENSE for details.
 
 Contact
 
-Lost Legendary Labs
+Lost Legendary Labs:
+
+For benchmark help:
+
+Support@DarkMagi.io
+
+For business inquiries:
+
+Mesiah@DarkMagi.io
