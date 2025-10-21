@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  lucid-matrix:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: lucid-matrix:latest
+    container_name: lucid-matrix
+    volumes:
+      - ../:/home/lucidmatrix/artifacts
+      - ../data:/home/lucidmatrix/data
+      - ../weights:/home/lucidmatrix/weights
+      - ../runs:/home/lucidmatrix/runs
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - CUDA_VISIBLE_DEVICES=0
+      - PYTHONPATH=/home/lucidmatrix/artifacts
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    command: ["./scripts/run_all.sh"]

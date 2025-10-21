@@ -1,0 +1,235 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Proof-Carrying Action Schema",
+  "description": "Schema for proof-carrying actions in the Lucid Matrix system",
+  "type": "object",
+  "required": [
+    "action_id",
+    "timestamp",
+    "action_type",
+    "content",
+    "metadata",
+    "proof_bundle",
+    "signature"
+  ],
+  "properties": {
+    "action_id": {
+      "type": "string",
+      "description": "Unique identifier for the action",
+      "pattern": "^pca_[a-f0-9]{32}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "description": "ISO 8601 timestamp of when the action was created",
+      "format": "date-time"
+    },
+    "action_type": {
+      "type": "string",
+      "description": "Type of action being performed",
+      "enum": [
+        "factual_claim",
+        "reasoning_step",
+        "uncertainty_statement",
+        "emotional_response",
+        "recommendation",
+        "source_citation",
+        "clarification_request",
+        "content_generation",
+        "content_modification",
+        "system_operation"
+      ]
+    },
+    "content": {
+      "type": "object",
+      "description": "The actual content of the action",
+      "required": ["text"],
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "The text content of the action"
+        },
+        "format": {
+          "type": "string",
+          "description": "Format of the content",
+          "enum": ["plaintext", "markdown", "html", "json", "code"]
+        },
+        "language": {
+          "type": "string",
+          "description": "ISO 639-1 language code",
+          "default": "en"
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional metadata about the action",
+      "properties": {
+        "model_version": {
+          "type": "string",
+          "description": "Version of the model that generated the action"
+        },
+        "confidence": {
+          "type": "number",
+          "description": "Confidence score for the action (0-1)",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "beam_index": {
+          "type": "integer",
+          "description": "Index of the beam that generated this action",
+          "minimum": 0
+        },
+        "parent_action_ids": {
+          "type": "array",
+          "description": "IDs of parent actions that led to this action",
+          "items": {
+            "type": "string",
+            "pattern": "^pca_[a-f0-9]{32}$"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "Tags associated with the action",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "proof_bundle": {
+      "type": "object",
+      "description": "Bundle of proofs supporting the action",
+      "required": ["proof_type", "verification_method", "evidence"],
+      "properties": {
+        "proof_type": {
+          "type": "string",
+          "description": "Type of proof provided",
+          "enum": [
+            "source_citation",
+            "logical_deduction",
+            "mathematical_proof",
+            "empirical_evidence",
+            "expert_consensus",
+            "uncertainty_quantification",
+            "model_limitation",
+            "safety_constraint"
+          ]
+        },
+        "verification_method": {
+          "type": "string",
+          "description": "Method used to verify the proof",
+          "enum": [
+            "source_verification",
+            "logical_verification",
+            "mathematical_verification",
+            "empirical_verification",
+            "consensus_verification",
+            "uncertainty_estimation",
+            "limitation_acknowledgment",
+            "safety_check"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "description": "Evidence supporting the action",
+          "items": {
+            "type": "object",
+            "required": ["type", "content"],
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "Type of evidence",
+                "enum": [
+                  "source",
+                  "reasoning",
+                  "calculation",
+                  "data",
+                  "consensus",
+                  "uncertainty",
+                  "limitation",
+                  "safety"
+                ]
+              },
+              "content": {
+                "type": "string",
+                "description": "Content of the evidence"
+              },
+              "weight": {
+                "type": "number",
+                "description": "Weight of the evidence (0-1)",
+                "minimum": 0,
+                "maximum": 1
+              }
+            }
+          }
+        },
+        "truth_stratification": {
+          "type": "object",
+          "description": "Truth stratification metrics",
+          "properties": {
+            "factual": {
+              "type": "number",
+              "description": "Factual accuracy score (0-1)",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "causal": {
+              "type": "number",
+              "description": "Causal reasoning score (0-1)",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "value": {
+              "type": "number",
+              "description": "Value alignment score (0-1)",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "affect": {
+              "type": "number",
+              "description": "Emotional safety score (0-1)",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        },
+        "verification_status": {
+          "type": "string",
+          "description": "Status of the verification process",
+          "enum": [
+            "verified",
+            "partially_verified",
+            "unverified",
+            "verification_failed",
+            "verification_skipped"
+          ]
+        }
+      }
+    },
+    "signature": {
+      "type": "object",
+      "description": "Cryptographic signature of the action",
+      "required": ["signature_value", "public_key_id", "algorithm"],
+      "properties": {
+        "signature_value": {
+          "type": "string",
+          "description": "Base64-encoded signature value"
+        },
+        "public_key_id": {
+          "type": "string",
+          "description": "Identifier for the public key used to verify the signature"
+        },
+        "algorithm": {
+          "type": "string",
+          "description": "Signature algorithm used",
+          "enum": ["ed25519", "ecdsa_p256", "rsa_pss_sha256"]
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "ISO 8601 timestamp of when the signature was created",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}

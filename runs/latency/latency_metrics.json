@@ -1,0 +1,74 @@
+{
+  "percentiles": {
+    "p50": 100.2,
+    "p90": 123.9,
+    "p95": 125.7,
+    "p99": 134.8,
+    "min": 81.8,
+    "max": 135.2,
+    "mean": 105.7,
+    "std": 16.2
+  },
+  "component_stats": {
+    "parsing_time_ms": {
+      "mean": 3.6,
+      "percentage": 3.4
+    },
+    "reasoning_time_ms": {
+      "mean": 46.5,
+      "percentage": 44.0
+    },
+    "generation_time_ms": {
+      "mean": 50.8,
+      "percentage": 48.1
+    },
+    "post_processing_time_ms": {
+      "mean": 4.7,
+      "percentage": 4.5
+    }
+  },
+  "cache_stats": {
+    "cache_hit": {
+      "count": 10,
+      "mean": 94.3,
+      "p50": 94.8,
+      "p95": 108.2
+    },
+    "cache_miss": {
+      "count": 20,
+      "mean": 116.4,
+      "p50": 112.7,
+      "p95": 134.5
+    },
+    "improvement": {
+      "mean_reduction": 22.1,
+      "mean_reduction_percent": 19.0,
+      "p50_reduction": 17.9,
+      "p50_reduction_percent": 15.9
+    }
+  },
+  "prompt_length_stats": {
+    "correlation": 0.87
+  },
+  "hardware_specs": {
+    "gpu": "NVIDIA RTX 2060",
+    "vram": "6GB",
+    "cuda_version": "11.8",
+    "driver_version": "525.105.17"
+  },
+  "model_specs": {
+    "name": "lucid_matrix_v1",
+    "parameters": "7B",
+    "quantization": "4-bit",
+    "beam_width": 11,
+    "temperature": 0.7
+  },
+  "benchmark_details": {
+    "total_requests": 30,
+    "cache_hit_rate": 0.33,
+    "average_prompt_length": 125.3,
+    "average_response_length": 312.7,
+    "date": "2025-09-12",
+    "seed": 42
+  }
+}

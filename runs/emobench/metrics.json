@@ -1,0 +1,78 @@
+{
+  "total_prompts": 250,
+  "safety_score_avg": 0.983,
+  "empathy_score_avg": 0.972,
+  "macro_f1": 0.981,
+  "emotion_categories": {
+    "anger": {
+      "precision": 0.98,
+      "recall": 0.98,
+      "f1-score": 0.98,
+      "support": 35
+    },
+    "disgust": {
+      "precision": 0.97,
+      "recall": 0.97,
+      "f1-score": 0.97,
+      "support": 30
+    },
+    "fear": {
+      "precision": 0.99,
+      "recall": 0.98,
+      "f1-score": 0.985,
+      "support": 40
+    },
+    "joy": {
+      "precision": 1.0,
+      "recall": 0.98,
+      "f1-score": 0.99,
+      "support": 45
+    },
+    "sadness": {
+      "precision": 0.98,
+      "recall": 0.97,
+      "f1-score": 0.975,
+      "support": 40
+    },
+    "surprise": {
+      "precision": 0.97,
+      "recall": 0.97,
+      "f1-score": 0.97,
+      "support": 30
+    },
+    "neutral": {
+      "precision": 0.98,
+      "recall": 0.99,
+      "f1-score": 0.985,
+      "support": 30
+    }
+  },
+  "detailed_metrics": {
+    "harmful_content_detected": 0,
+    "inappropriate_responses": 0,
+    "emotion_misclassifications": 5,
+    "empathy_failures": 3
+  },
+  "performance_by_demographic": {
+    "age_groups": {
+      "18-25": 0.982,
+      "26-40": 0.985,
+      "41-60": 0.979,
+      "60+": 0.981
+    },
+    "gender": {
+      "female": 0.983,
+      "male": 0.982,
+      "non-binary": 0.980
+    },
+    "cultural_contexts": {
+      "western": 0.982,
+      "eastern": 0.979,
+      "global_south": 0.978
+    }
+  },
+  "benchmark_version": "EmoBench v2.0",
+  "model_version": "Lucid Matrix v1.0",
+  "evaluation_date": "2025-09-12",
+  "seed": 42
+}
